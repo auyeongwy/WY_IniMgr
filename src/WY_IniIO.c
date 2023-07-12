@@ -19,7 +19,7 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
         *p_buffer_len = tmp;
     rewind(fp); /* Return to start of file. */
 
-    if((*p_buffer = (char*)malloc(*p_buffer_len)) == NULL) /* Create buffer to read the data. */
+    if((*p_buffer = (char*)malloc(p_max_size)) == NULL) /* Create buffer to read the data. This can be larger than p_buffer_len. */
         goto bad_exit;
 
     fread(*p_buffer, *p_buffer_len, 1, fp); /* Read all data into m_buffer. */
