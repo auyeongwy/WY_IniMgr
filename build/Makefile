@@ -3,9 +3,9 @@ CC = gcc
 CFLAGS = -Wall -O2 -std=c17 -fsanitize=address -static-libasan -g3 -march=native
 SRC = ../src
 BUILD = ../build
-OBJS = $(BUILD)/WY_IniMgr.o $(BUILD)/WY_IniIO.o $(BUILD)/WY_IniParseAgent.o
+OBJS = $(BUILD)/WY_IniMgr.o $(BUILD)/WY_IniIO.o $(BUILD)/WY_IniParseAgent.o $(BUILD)/WY_IniWriteAgent.o 
 API_HEADERS = $(SRC)/WY_IniMgr.h 
-HEADERS = $(SRC)/WY_IniMgr.h $(SRC)/WY_IniIO.h $(SRC)/WY_IniDefs.h $(SRC)/WY_IniParseAgent.h
+HEADERS = $(SRC)/WY_IniMgr.h $(SRC)/WY_IniIO.h $(SRC)/WY_IniDefs.h $(SRC)/WY_IniParseAgent.h $(SRC)/WY_IniWriteAgent.h
 TARGETLIB = $(BUILD)/WY_IniMgr.a
 
 
@@ -29,6 +29,9 @@ $(BUILD)/WY_IniIO.o: $(HEADERS) $(SRC)/WY_IniIO.c
 
 $(BUILD)/WY_IniParseAgent.o: $(HEADERS) $(SRC)/WY_IniParseAgent.c
 	$(CC) $(CFLAGS) -c $(SRC)/WY_IniParseAgent.c -o $(BUILD)/WY_IniParseAgent.o
+
+$(BUILD)/WY_IniWriteAgent.o: $(HEADERS) $(SRC)/WY_IniWriteAgent.c
+	$(CC) $(CFLAGS) -c $(SRC)/WY_IniWriteAgent.c -o $(BUILD)/WY_IniWriteAgent.o
 
 object_msg:
 	@echo Building objects...
