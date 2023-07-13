@@ -1,3 +1,7 @@
+/**
+ * @file WY_IniParseAgent.h
+*/
+
 #ifndef _WY_INIPARSEAGENT_H_
 #define _WY_INIPARSEAGENT_H_
 

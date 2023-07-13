@@ -10,29 +10,10 @@
 #include "WY_IniMgr.h"
 #include "WY_IniIO.h"
 #include "WY_IniParseAgent.h"
+#include "WY_IniWriteAgent.h"
 
 
 static struct S_wyini_buffer m_wyini_buffer; /**< Internal buffer maintained by WY_IniMgr. */
-
-
-/**
- * Writes a value into a specified offset into a line within the internal buffer.
- * @param p_start_offset Index position in m_wyini_buffer.m_buffer pointing at the position after the 'var=' pattern.
- * @param p_end_offset Index position in m_wyini_buffer.m_buffer pointing at the '\n' or terminating char after the 'var=' pattern.
- * @param p_val_len Length of the value to write.
- * @param p_val The value to write.
- * @return 0 if success, else -1.
-*/
-static int wyini_write_val_inline(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_val_len, const char *restrict const p_val);
-
-/**
- * Removes trailing whitespace from the variable value within a start and end index for m_buffer.
- * @param p_start_offset The starting index in m_buffer pointing to a variable.
- * @param p_end_offset The ending index in m_buffer that points to a variable.
- * @return A new p_end_offset that excludes any trailing whitespace originally found before p_end_offset.
- */
-inline static unsigned int wyini_remove_ending_whitespace(const unsigned int p_start_offset, unsigned int p_end_offset);
-
 
 
 void wyini_init()
@@ -110,7 +91,7 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
         wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
                 
         if(wyini_find_var_val_inline(false, start_offset, end_offset, var_len, p_var, &val_offset, &m_wyini_buffer)==0) { /* Find the variable=value pair in the line. */
-            val_len = wyini_remove_ending_whitespace(start_offset, end_offset) - val_offset; /* Remove trailing whitespace after variable=value. */
+            val_len = wyini_remove_ending_whitespace(start_offset, end_offset, &m_wyini_buffer) - val_offset; /* Remove trailing whitespace after variable=value. */
             if(val_len < WYINI_MAX_VAL_LEN) {  
                 snprintf(m_wyini_buffer.m_val_buffer, val_len+1, m_wyini_buffer.m_buffer+val_offset); /* snprintf writes a terminating char in the last position so val_len+1. */
                 return 0; /* Found everything. Return success. */
@@ -143,45 +124,9 @@ int wyini_write_val(const char *restrict const p_var, const char *restrict const
     while(start_offset < max_len) {
         wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
         if(wyini_find_var_val_inline(true, start_offset, end_offset, strlen(p_var), p_var, &val_offset, &m_wyini_buffer)==0) /* Find the "variable=" pattern in the line. */
-            return wyini_write_val_inline(val_offset, end_offset, val_len, p_val);
+            return wyini_write_val_inline(val_offset, end_offset, val_len, p_val, &m_wyini_buffer);
         start_offset = end_offset + 1; /* Pattern not found. Move on to the next line. */
     }
 
     return -1; /* Not found, return failure. */
-}
-
-
-
-static int wyini_write_val_inline(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_val_len, const char *restrict const p_val)
-{
-    const unsigned int current_space = p_end_offset - p_start_offset; /* How much space between '=' and '\n' or '\0'. */
-    
-    if(current_space >= p_val_len) { /* Enough space to fit in the new variable. */ 
-        if(current_space > p_val_len) {
-            memmove(m_wyini_buffer.m_buffer + p_start_offset + p_val_len, m_wyini_buffer.m_buffer + p_end_offset, m_wyini_buffer.m_buffer_len - p_end_offset); /* Move existing content in m_buffer to fill in the space. No need for this step if current_space == p_val_len. */
-            m_wyini_buffer.m_buffer_len -= (current_space - p_val_len); /* Current buffer size decreased. Update it. */ 
-        }
-        memcpy(m_wyini_buffer.m_buffer + p_start_offset, p_val, p_val_len); /* Write the new variable. */
-    }
-
-    else { /* Not enough space to fit in the new variable. Additional checks to conduct. */
-        const unsigned int additional_space = p_val_len - current_space;
-        if(additional_space + m_wyini_buffer.m_buffer_len > m_wyini_buffer.m_max_file_size) /* Writing the new var exceeds max file size. Return failure. */
-            return -1;
-
-        memmove(m_wyini_buffer.m_buffer + p_start_offset + p_val_len, m_wyini_buffer.m_buffer + p_end_offset, m_wyini_buffer.m_buffer_len - p_end_offset); /* Move existing content in m_buffer to make space. */
-        memcpy(m_wyini_buffer.m_buffer + p_start_offset, p_val, p_val_len); /* Write the new variable. */
-        m_wyini_buffer.m_buffer_len += additional_space; /* Update the increased buffer space. */
-    }
-
-    return 0;
-}
-
-
-
-inline static unsigned int wyini_remove_ending_whitespace(const unsigned int p_start_offset, unsigned int p_end_offset)
-{
-    while((m_wyini_buffer.m_buffer[p_end_offset-1] == ' ') && (p_end_offset > p_start_offset))
-        --p_end_offset;
-    return p_end_offset;
 }
