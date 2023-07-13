@@ -20,7 +20,12 @@
 #define _WY_INIMGR_H_
 
 /**
- * Initialises WY_IniMgr for reading from the given file. 
+ * Initialises WY_IniMgr internals. Always call this function first before calling any other API or bad things will happen.
+ */
+void wyini_init();
+
+/**
+ * Reads content from a file into internal buffer. 
  * Internally, this performs the following actions: 
  * -# Opens the file. 
  * -# Reads all file content into an internal buffer. 
@@ -29,10 +34,11 @@
  * 
  * Calling this function implicitly calls wyini_clean() at the beginning, to clean up the internal buffers. So for e.g. if one wants to read 2 files one after the other, we can call this function consecutively without the need to call wyini_clean() twice. But wyini_clean() is always required to properly perform final cleanup. E.g. <br>
  * @code
+ * wyini_init();
  * wyini_open("file1", MAXSIZE); 
- * ....... //get the contents of file1 
+ * // ... get the contents of file1 
  * wyini_open("file2", MAXSIZE); 
- * ....... //get the contents of file2 
+ * // ... get the contents of file2 
  * wyini_clean() // Done with processing file content so final cleanup. 
  * @endcode
  * @param p_file File to open. 

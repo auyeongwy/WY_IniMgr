@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
     char num_val[32];
     char *val;
 
+    wyini_init();
     if(wyini_open("inifile", 1024) != 0) {/* Open the file and copy the content. */
         printf("Error reading file.\n");
         return 0;
