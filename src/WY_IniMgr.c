@@ -34,9 +34,14 @@ static void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *
 static int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var, unsigned int *restrict p_val_offset);
 
 /**
- * Writes a variable 
+ * Writes a value into a specified offset into a line within the internal buffer.
+ * @param p_start_offset Index position in m_wyini_buffer.m_buffer pointing at the position after the 'var=' pattern.
+ * @param p_end_offset Index position in m_wyini_buffer.m_buffer pointing at the '\n' or terminating char after the 'var=' pattern.
+ * @param p_val_len Length of the value to write.
+ * @param p_val The value to write.
+ * @return 0 if success, else -1.
 */
-static int wyini_write_var(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var);
+static int wyini_write_val_inline(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_val_len, const char *restrict const p_val);
 
 /**
  * Removes trailing whitespace from the variable value within a start and end index for m_buffer.
@@ -156,7 +161,7 @@ int wyini_write_val(const char *restrict const p_var, const char *restrict const
     while(start_offset < max_len) {
         wyini_get_nextline(start_offset, &end_offset); /* Get the next line in m_buffer. */
         if(wyini_find_var_val_inline(true, start_offset, end_offset, strlen(p_var), p_var, &val_offset)==0) /* Find the "variable=" pattern in the line. */
-            return wyini_write_var(val_offset, end_offset, val_len, p_val);
+            return wyini_write_val_inline(val_offset, end_offset, val_len, p_val);
         start_offset = end_offset + 1; /* Pattern not found. Move on to the next line. */
     }
 
@@ -218,7 +223,7 @@ static int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p
 
 
 
-static int wyini_write_var(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_val_len, const char *restrict const p_val)
+static int wyini_write_val_inline(const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_val_len, const char *restrict const p_val)
 {
     const unsigned int current_space = p_end_offset - p_start_offset; /* How much space between '=' and '\n' or '\0'. */
     
