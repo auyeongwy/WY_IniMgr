@@ -42,6 +42,13 @@
 int wyini_open(const char *restrict const p_file, const unsigned int p_max_size);
 
 /**
+ * Saves the content of the internal buffer to a file - overwriting it if it already exists. Obviusly this only works if the internal buffer is already populated via earlier API calls such as wyini_open(). 
+ * @param p_file The file name.
+ * @return 0 if success. Else -1.
+ */
+int wyini_save(const char *restrict const p_file);
+
+/**
  * Cleans up the internal buffers. Call this function when all read/write operations are completed. Note that wyini_open() calls this function implicitly at the beginning of execution, but NOT at the end of execution. Hence this function must be called for a final clean-up. 
  */
 void wyini_clean();
@@ -53,6 +60,17 @@ void wyini_clean();
  * @return 0 if success, else -1.
  */
 int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict p_val);
+
+/**
+ * Writes the char value of an existing variable to the internal buffer opened by wyini_open().  
+ * @param p_var The variable name.
+ * @param p_val The value to write.
+ * @return 0 if success. Returns -1 if either of the following are true. <br>
+ * (1) The internal buffer is empty. <br>
+ * (2) The variable does not exist. <br>
+ * (3) Writing the variable exceeds the maximum allowed size of the file or variable length.
+*/
+int wyini_write_val(const char *restrict const p_var, const char *restrict const p_val);
 
 
 #endif

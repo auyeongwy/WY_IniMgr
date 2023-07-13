@@ -28,4 +28,13 @@
 int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_size, unsigned int *restrict p_buffer_len, char ** p_buffer);
 
 
+/**
+ * Saves data into a file, overwriting it if it exists. 
+ * @param p_file The file name.
+ * @param p_buffer_len Size of the content to write to file.
+ * @param p_buffer THe data to write.
+ * @return 0 if success, else -1.
+ */
+int wyini_save_file(const char *restrict const p_file, const unsigned int p_buffer_len, const char *restrict const p_buffer);
+
 #endif

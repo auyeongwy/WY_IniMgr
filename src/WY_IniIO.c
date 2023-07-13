@@ -37,3 +37,21 @@ bad_exit:
     }
     return -1;
 }
+
+
+
+int wyini_save_file(const char *restrict const p_file, const unsigned int p_buffer_len, const char *restrict const p_buffer)
+{
+    int return_val = -1;
+
+    FILE *fp = NULL;
+    if((fp = fopen(p_file, "w")) == NULL) /* Create file for writing, overwriting where necessary. */     
+        return -1;
+
+    fwrite(p_buffer, 1, p_buffer_len, fp); /* Writes data to file. */
+    if(!ferror(fp)) /* No error writing to file. */
+        return_val = 0;
+
+    fclose(fp);
+    return return_val;
+}
