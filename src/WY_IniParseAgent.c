@@ -27,7 +27,7 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
     char *restrict buffer = p_wyini_buffer->m_buffer;
 
     if(strncmp(buffer + p_start_offset, p_var, p_var_len) != 0) /* Cannot match the var so exit. */
-        return -1;
+        return WYINI_NOT_FOUND;
 
     int i = p_start_offset + p_var_len; /* Move index to right after the 'var' pattern found. */
     while(i<p_end_offset) { /* Try to match the " =" pattern after the var. */
@@ -38,12 +38,12 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
             break;
         }
         else /* Found something that isn't a whitespace or '=' after the 'var' pattern. Exit. */
-            return -1;
+            return WYINI_NOT_FOUND;
     }
 
     if(p_var_only) { /* Only searching for the pattern 'var='. The 'val' that comes after is not required. */
         *p_return_offset = i;
-        return 0;
+        return WYINI_OK;
     }
 
     while(i<p_end_offset) { /* Skip any whitespace after the ' =' pattern. */
@@ -55,8 +55,8 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
 
     if(i<p_end_offset) { /* Get the value assigned to the var. */
         *p_return_offset = i;
-        return 0;
+        return WYINI_OK;
     }
 
-    return -1;
+    return WYINI_NOT_FOUND;
 }

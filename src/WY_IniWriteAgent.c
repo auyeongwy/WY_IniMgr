@@ -32,12 +32,12 @@ int wyini_write_val_inline(const unsigned int p_start_offset, const unsigned int
     else { /* Not enough space to fit in the new variable. Additional checks to conduct. */
         const unsigned int additional_space = p_val_len - current_space;
         if(additional_space + p_wyini_buffer->m_buffer_len > p_wyini_buffer->m_max_file_size) /* Writing the new var exceeds max file size. Return failure. */
-            return -1;
+            return WYINI_MEMORY_ERR;
 
         memmove(buffer + p_start_offset + p_val_len, buffer + p_end_offset, p_wyini_buffer->m_buffer_len - p_end_offset); /* Move existing content in m_buffer to make space. */
         memcpy(buffer + p_start_offset, p_val, p_val_len); /* Write the new variable. */
         p_wyini_buffer->m_buffer_len += additional_space; /* Update the increased buffer space. */
     }
 
-    return 0;
+    return WYINI_OK;
 }
