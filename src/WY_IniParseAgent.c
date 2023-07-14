@@ -9,12 +9,11 @@
 void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer)
 {
     const unsigned int max_len = p_wyini_buffer->m_buffer_len;
-    char tmp;
+    char *restrict buffer = p_wyini_buffer->m_buffer;
 
     *p_end_offset = p_start_offset;
     do {
-        tmp = p_wyini_buffer->m_buffer[*p_end_offset];
-        if((tmp=='\n') || (tmp=0))  /* Found the "\n". or terminating char. */ 
+        if((buffer[*p_end_offset]=='\n') || (buffer[*p_end_offset]==0))  /* Found the "\n". or terminating char. */ 
             return;
     } while ((*p_end_offset += 1) < max_len);
 
