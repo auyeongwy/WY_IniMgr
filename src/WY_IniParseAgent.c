@@ -24,14 +24,16 @@ void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restric
 
 int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var, unsigned int *restrict p_return_offset, struct S_wyini_buffer *restrict p_wyini_buffer)
 {
-    if(strncmp(p_wyini_buffer->m_buffer + p_start_offset, p_var, p_var_len) != 0) /* Cannot match the var so exit. */
+    char *restrict buffer = p_wyini_buffer->m_buffer;
+
+    if(strncmp(buffer + p_start_offset, p_var, p_var_len) != 0) /* Cannot match the var so exit. */
         return -1;
 
     int i = p_start_offset + p_var_len; /* Move index to right after the 'var' pattern found. */
     while(i<p_end_offset) { /* Try to match the " =" pattern after the var. */
-        if(p_wyini_buffer->m_buffer[i]==' ') /* Skip any whitespace. */
+        if(buffer[i]==' ') /* Skip any whitespace. */
             ++i;
-        else if(p_wyini_buffer->m_buffer[i]=='=') { /* Found '='. Break the loop. */
+        else if(buffer[i]=='=') { /* Found '='. Break the loop. */
             ++i;
             break;
         }
@@ -45,7 +47,7 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
     }
 
     while(i<p_end_offset) { /* Skip any whitespace after the ' =' pattern. */
-        if(p_wyini_buffer->m_buffer[i]==' ')
+        if(buffer[i]==' ')
             ++i;
         else
             break;
