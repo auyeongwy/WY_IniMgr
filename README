@@ -1,11 +1,13 @@
-WY_IniMgr is a C library that provides a simple API to read values from a ini file of the form:
+WY_IniMgr is a C library that provides a simple API to read and write values from an INI file with variable-value pairs in the following format:
 
 Variable 1 = Value 1
 Variable 2 = Value 2
 
-How this is different from other ini file parsers:
-- The library is developed on a Linux system and excludes using regex.h so it can be easily compiled on Windows systems. Also adhered to using standard C functions to make re-building on other systems easy. 
-- MIT license so easy to incorporate in any application.
-- Explicitly developed with a simple-to-use API to make it super-easy to use in any application. 
+This library has the following key characteristics:
+- The library is developed on a Linux system and excludes using regular expression functions from regex.h so it can be easily compiled on Windows systems without the need to get the associated PCRE library. 
+- It adheres to using standard C functions to make re-building on other systems easy.
+- Implement write functions in addition to read functions so users can read and write to INI files.  
+- Uses the MIT license so it is easy to incorporate in any application.
+- Consciously developed with a simple-to-use API to make it super-easy to use in any application. 
 
-For more information, please refer to documentation in the "doc" dicrectory.
+For more information and examples, please refer to documentation in the "doc" directory.
