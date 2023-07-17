@@ -1,21 +1,21 @@
 CC = gcc
-#CFLAGS = -std=c17 -Wall -O2 -march=native
-CFLAGS = -Wall -O2 -std=c17 -fsanitize=address -static-libasan -g3 -march=native
+CFLAGS = -std=c17 -Wall -O2 -march=native
+#CFLAGS = -Wall -O2 -std=c17 -fsanitize=address -static-libasan -g3 -march=native
 SRC = ../src
 BUILD = ../build
 OBJS = $(BUILD)/WY_IniMgr.o $(BUILD)/WY_IniIO.o $(BUILD)/WY_IniParseAgent.o $(BUILD)/WY_IniWriteAgent.o 
 API_HEADERS = $(SRC)/WY_IniMgr.h 
 HEADERS = $(SRC)/WY_IniMgr.h $(SRC)/WY_IniIO.h $(SRC)/WY_IniDefs.h $(SRC)/WY_IniParseAgent.h $(SRC)/WY_IniWriteAgent.h
-TARGETLIB = $(BUILD)/WY_IniMgr.a
+TARGETLIB = $(BUILD)/lib_WY_IniMgr.a
 
 
 .PHONY: clean distclean object_msg
 
 all: $(BUILD)/demo $(TARGETLIB)
 
-$(BUILD)/demo: $(SRC)/main.c $(API_HEADERS) $(TARGETLIB)
+$(BUILD)/demo: $(SRC)/demo.c $(API_HEADERS) $(TARGETLIB)
 	@echo Building demo...
-	$(CC) $(CFLAGS) $(SRC)/main.c $(TARGETLIB) -o $(BUILD)/demo
+	$(CC) $(CFLAGS) $(SRC)/demo.c $(TARGETLIB) -o $(BUILD)/demo
 
 $(TARGETLIB): object_msg $(OBJS)
 	@echo Building library...
