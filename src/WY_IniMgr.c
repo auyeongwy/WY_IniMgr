@@ -32,7 +32,7 @@ int wyini_open(const char *restrict const p_file, const unsigned int p_max_size)
     int return_val;
 
     if((return_val = wyini_read_file(p_file, p_max_size, &(m_wyini_buffer.m_buffer_len), &(m_wyini_buffer.m_buffer))) == WYINI_OK) {
-        m_wyini_buffer.m_buffer[m_wyini_buffer.m_buffer_len-1] = 0; /* Zero out the eof. */
+        //m_wyini_buffer.m_buffer[m_wyini_buffer.m_buffer_len-1] = 0; /* Zero out the eof. */
         m_wyini_buffer.m_max_file_size = p_max_size;
 
         if((m_wyini_buffer.m_val_buffer = (char*)malloc(WYINI_MAX_VAL_LEN)) != NULL)

@@ -1,5 +1,5 @@
 /**
- * @file main.c
+ * @file demo.c
  * Demo application to demonstrate usage of the WY_IniMgr library. 
 */
 #include <stddef.h>

@@ -14,8 +14,8 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
     if(fseek(fp, 0, SEEK_END) != 0) /* Goto end of file. */
         goto bad_exit;
 
-    long tmp = ftell(fp); /* Get size of file. */
-    if((tmp<1) || (tmp>p_max_size)) /* Exit if too small or larger than the defined maximum. */
+    const long tmp = ftell(fp); /* Get size of content in file. */
+    if((tmp<1) || (tmp>=p_max_size)) /* Exit if too small or larger than the defined maximum. */
         goto bad_exit;
     else
         *p_buffer_len = tmp;
@@ -29,6 +29,7 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
     fread(*p_buffer, *p_buffer_len, 1, fp); /* Read all data into m_buffer. */
     if(ferror(fp) != 0)
         goto bad_exit;
+    *(*p_buffer+tmp) = 0; /* Zero the byte after the content. */
 
     fclose(fp);
     return WYINI_OK;
