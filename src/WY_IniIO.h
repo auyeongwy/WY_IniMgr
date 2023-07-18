@@ -25,7 +25,7 @@
  * @param p_buffer Returns a buffer of size p_buffer_len with content read from the file. Pass in an uninitialised pointer address here and the buffer will be dynamically allocated with the value of p_max_size. Hence it is necessary to deallocate this buffer once all parsing operations are completed. The max size is determined by p_max_size and only p_max_size-1 will be read into the buffer. p_buffer[p_max_size-1] will be set to 0.
  * @return WYINI_OK if success. Else negative value defined in WY_IniDefs.h if error encountered. 
  */
-int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_size, unsigned int *restrict p_buffer_len, char ** p_buffer);
+int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_size, unsigned int *restrict p_buffer_len, char *restrict *restrict p_buffer);
 
 
 /**

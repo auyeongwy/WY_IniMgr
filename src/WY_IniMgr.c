@@ -32,12 +32,8 @@ int wyini_open(const char *restrict const p_file, const unsigned int p_max_size)
     int return_val;
 
     if((return_val = wyini_read_file(p_file, p_max_size, &(m_wyini_buffer.m_buffer_len), &(m_wyini_buffer.m_buffer))) == WYINI_OK) {
-        //m_wyini_buffer.m_buffer[m_wyini_buffer.m_buffer_len-1] = 0; /* Zero out the eof. */
         m_wyini_buffer.m_max_file_size = p_max_size;
-
-        if((m_wyini_buffer.m_val_buffer = (char*)malloc(WYINI_MAX_VAL_LEN)) != NULL)
-            return_val = WYINI_OK; /* All file reads and memory allocation successful. */
-        else
+        if((m_wyini_buffer.m_val_buffer = (char*)malloc(WYINI_MAX_VAL_LEN)) == NULL)
             return_val = WYINI_MEMORY_ERR;
     } 
 
@@ -91,15 +87,16 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
         wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
                 
         if(wyini_find_var_val_inline(false, start_offset, end_offset, var_len, p_var, &val_offset, &m_wyini_buffer)==WYINI_OK) { /* Find the variable=value pair in the line. */
-            val_len = wyini_remove_ending_whitespace(start_offset, end_offset, &m_wyini_buffer) - val_offset; /* Remove trailing whitespace after variable=value. */
-            if(val_len < WYINI_MAX_VAL_LEN) {  
-                snprintf(m_wyini_buffer.m_val_buffer, val_len+1, m_wyini_buffer.m_buffer+val_offset); /* snprintf writes a terminating char in the last position so val_len+1. */
+            val_len = wyini_remove_ending_whitespace(start_offset, end_offset, &m_wyini_buffer) - val_offset + 1; /* Remove trailing whitespace after variable=value. +1 is needed as our bounds include the starting and end index. */
+            if(val_len < WYINI_MAX_VAL_LEN) {
+                memcpy(m_wyini_buffer.m_val_buffer, m_wyini_buffer.m_buffer+val_offset, val_len);
+                m_wyini_buffer.m_val_buffer[val_len] = 0; /* Make sure to terminate the value buffer. */ 
                 return WYINI_OK; /* Found everything. Return success. */
             } else
                 return WYINI_NOT_FOUND; /* If val_len exceeds buffer assume we'll get the wrong value. Return failure. */
         } 
         
-        start_offset = end_offset + 1; /* Pattern not found. Move on to the next line. */
+        start_offset = end_offset + 2; /* Pattern not found. Move on to the next line, skipping the '\n'. */
     }
 
     return WYINI_NOT_FOUND;
@@ -125,7 +122,7 @@ int wyini_write_val(const char *restrict const p_var, const char *restrict const
         wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
         if(wyini_find_var_val_inline(true, start_offset, end_offset, strlen(p_var), p_var, &val_offset, &m_wyini_buffer)==WYINI_OK) /* Find the "variable=" pattern in the line. */
             return wyini_write_val_inline(val_offset, end_offset, val_len, p_val, &m_wyini_buffer);
-        start_offset = end_offset + 1; /* Pattern not found. Move on to the next line. */
+        start_offset = end_offset + 2; /* Pattern not found. Move on to the next line, skipping the '\n'. */
     }
 
     return WYINI_NOT_FOUND; /* Not found, return failure. */

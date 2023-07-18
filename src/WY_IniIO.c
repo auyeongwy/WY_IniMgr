@@ -4,7 +4,7 @@
 #include "WY_IniDefs.h"
 
 
-int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_size, unsigned int *restrict p_buffer_len, char ** p_buffer)
+int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_size, unsigned int *restrict p_buffer_len, char *restrict *restrict p_buffer)
 {
     int return_val = WYINI_IO_ERR;
 
@@ -15,7 +15,7 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
         goto bad_exit;
 
     const long tmp = ftell(fp); /* Get size of content in file. */
-    if((tmp<1) || (tmp>=p_max_size)) /* Exit if too small or larger than the defined maximum. */
+    if((tmp<1) || (tmp>p_max_size)) /* Exit if too small or larger than the defined maximum. */
         goto bad_exit;
     else
         *p_buffer_len = tmp;
@@ -26,10 +26,9 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
         goto bad_exit;
     }
 
-    fread(*p_buffer, *p_buffer_len, 1, fp); /* Read all data into m_buffer. */
+    fread(*p_buffer, *p_buffer_len, 1, fp); /* Read content into m_buffer. */
     if(ferror(fp) != 0)
         goto bad_exit;
-    *(*p_buffer+tmp) = 0; /* Zero the byte after the content. */
 
     fclose(fp);
     return WYINI_OK;
