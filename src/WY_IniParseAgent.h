@@ -10,9 +10,10 @@
 
 
 /**
- * Get the next line in the internal buffer. If the buffer ends without a next line this returns the index up to the terminating or last char.
+ * Get the next line in the internal buffer. If the buffer ends without a next line this returns the index of the byte before the terminating char or simply the last char in the provided buffer
+ * .
  * @param p_start_offset Position in p_wyini_buffer->m_buffer to start parsing.
- * @param p_end_offset Returns position of the next line or terminating character found.
+ * @param p_end_offset Returns position of the byte before the next line or terminating character found.
  * @param p_wyini_buffer The internal buffer to search.
  */
 void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer);
@@ -26,7 +27,7 @@ void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restric
  * @param p_var_len The length of the variable to match.
  * @param p_var The variable to match.
  * @param p_return_offset Returns the offset pointing to the start of the value as selected by the value in p_var_only.
- * \return 0 if success. Else -1.
+ * \return WYINI_OK if success. Else a negative value defined in WY_IniDefs.h.
  */
 int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var, unsigned int *restrict p_return_offset, struct S_wyini_buffer *restrict p_wyini_buffer);
 

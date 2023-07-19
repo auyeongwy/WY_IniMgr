@@ -13,7 +13,7 @@
  * unsigned char *buffer;
  * 
  * if(wyini_read_file("filename", 1024, &buffer_len, &buffer) == 0) 
- *  printf("Read %u chars.\nContent: %s\n", buffer_len, buffer);
+ *  printf("Read %u chars.\n", buffer_len);
  * // process buffer here
  * // .....
  * free(buffer); // Done processing, remember to deallocate memory.
