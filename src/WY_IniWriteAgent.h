@@ -1,5 +1,6 @@
 /**
  * @file WY_IniWriteAgent.h
+ * Declares functions for performing write operations.
 */
 
 #ifndef _WY_INIWRITEAGENT_H_
@@ -20,7 +21,7 @@ unsigned int wyini_remove_ending_whitespace(const unsigned int p_start_offset, u
 /**
  * Writes a value into a specified offset into a line within the internal buffer S_wyini_buffer.
  * @param p_start_offset Index position in S_wyini_buffer pointing at the position before the 'var=' pattern.
- * @param p_end_offset Index position in S_wyini_buffer pointing at the byte before '\n' or terminating char after the 'var=val' pattern.
+ * @param p_end_offset Index position in S_wyini_buffer pointing at the byte before nextline or terminating indicator after the 'var=val' pattern.
  * @param p_val_len Length of the value to write.
  * @param p_val The value to write.
  * @param p_wyini_buffer The S_wyini_buffer to operate on.

@@ -1,5 +1,6 @@
 /**
  * @file WY_IniParseAgent.h
+ * Declares functions for performing parsing and read operations.
 */
 
 #ifndef _WY_INIPARSEAGENT_H_
@@ -10,13 +11,14 @@
 
 
 /**
- * Get the next line in the internal buffer. If the buffer ends without a next line this returns the index of the byte before the terminating char or simply the last char in the provided buffer
+ * Get the next line in the internal buffer. If the buffer ends without a next line this returns the index of the byte before the terminating char or simply the last char in the provided buffer. Currently this function looks for '\n' or '\r\n'.
  * .
- * @param p_start_offset Position in p_wyini_buffer->m_buffer to start parsing.
+ * @param p_start_offset Position in S_wyini_buffer to start parsing.
  * @param p_end_offset Returns position of the byte before the next line or terminating character found.
  * @param p_wyini_buffer The internal buffer to search.
+ * @return Size of the nextline character. Possible values are: 1 for '\n'. 2 for Windows-style '\r\n'. 0 if we hit the end of the provided S_wyini_buffer without any nextline or terminating indicator.
  */
-void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer);
+unsigned int wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer);
 
 
 /**

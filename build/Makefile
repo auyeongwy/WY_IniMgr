@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -std=c17 -Wall -O2 -march=native
-#CFLAGS = -Wall -O2 -std=c17 -fsanitize=address -static-libasan -g3 -march=native
+#CFLAGS = -Wall -std=c17 -fsanitize=address -static-libasan -g3 -march=native
 SRC = ../src
 BUILD = ../build
 OBJS = $(BUILD)/WY_IniMgr.o $(BUILD)/WY_IniIO.o $(BUILD)/WY_IniParseAgent.o $(BUILD)/WY_IniWriteAgent.o 

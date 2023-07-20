@@ -1,0 +1,6 @@
+VAR_1 = ONE
+VAR_2 = 2
+VAR_3 = three
+VAR_4 = 4
+VAR_5 = FIVE123
+NUM_VAR_1 =15

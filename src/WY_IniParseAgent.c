@@ -6,18 +6,26 @@
 #include "WY_IniParseAgent.h"
 
 
-void wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer)
+unsigned int wyini_get_nextline(const unsigned int p_start_offset, unsigned int *restrict p_end_offset, struct S_wyini_buffer *restrict p_wyini_buffer)
 {
     const unsigned int max_len = p_wyini_buffer->m_buffer_len;
     char *restrict buffer = p_wyini_buffer->m_buffer;
+    unsigned int end_offset = p_start_offset;
+    unsigned int nextline_len = 0;
 
-    *p_end_offset = p_start_offset;
     do {
-        if((buffer[*p_end_offset]=='\n') || (buffer[*p_end_offset]=='\0'))  /* Found '\n' or a terminating char. */ 
+        if((buffer[end_offset]=='\n') || (buffer[end_offset]=='\0')) { /* Found '\n' or a terminating char. */ 
+            if(buffer[end_offset-1]=='\r') {/* If Windows style formatting, need to exclude the '\r' as well. */
+                --end_offset;
+                nextline_len = 2; /* Found nextline is '\r\n' */
+            } else
+                nextline_len = 1; /* Found nextline is '\n' */
             break;
-    } while ((*p_end_offset += 1) < max_len);
+        }
+    } while ((end_offset += 1) < max_len);
 
-    *p_end_offset -= 1; /* Retrace to pinpoint the offset index before '\n' or end of buffer. */
+    *p_end_offset = --end_offset; /* Retrace to pinpoint the offset index before nextline indicator or end of buffer. */
+    return nextline_len;
 }
 
 
