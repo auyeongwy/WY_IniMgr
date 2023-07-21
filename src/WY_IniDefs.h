@@ -9,8 +9,9 @@
 
 #define WYINI_OK 0 /**< Status OK. */
 #define WYINI_MEMORY_ERR -1 /**< Status NOK caused by memory error. E.g. memory allocation failed, memory limits exceeded, etc. */
-#define WYINI_NOT_FOUND -2 /**< Status NOK caused by resource not found. E.g. pattern not found. */
-#define WYINI_IO_ERR -3 /**< Status NOK caused by system IO error. E.g. failed to find or open file. */
+#define WYINI_IO_ERR -2 /**< Status NOK caused by system IO error. E.g. failed to find or open file. */
+#define WYINI_NOT_FOUND -3 /**< Status NOK caused by resource not found. E.g. pattern not found. */
+#define WYINI_VAL_NOT_FOUND -4 /**< Status NOK caused by variable not found in the pattern 'var=val'. */
 
 /**
  * The internal buffer structure maintained by WY_IniMgr. 

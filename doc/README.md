@@ -51,6 +51,8 @@ For an example, refer to demo.c. This is the best guide to using the library.
 The supplied Makefile defaults to using the following compiler flags. Modify them as required to suit your own build system.<br>
 `-std=c17 -Wall -O2 -march=native`
 
+To clean up object files, run `make clean`. To clean up all files including library files and the demo application, run `make distclean`.
+
 Demo application
 ================
 The demo application reads and writes to either inifile or win_inifile.txt (with Windows-style '\r\n' nextline). Users can easily switch between either file by changing the source code in demo.c.
@@ -94,6 +96,10 @@ Erasing values assigned to a variable
 We can erase a value assigned to a variable by simply writing an empty space " " to it. Example:
 
     wyini_write_val("VARNAME"," ");
+
+Variable with no value
+----------------------
+If wyini_get_var_val() is called with `p_var_only = false` and the variable is found but no value is found in the 'var=val' pattern, `WYINI_VAL_NOT_FOUND` is returned. This is to support locating variables that are found in the INI config file with no values assigned. 
 
 Security cautions
 -----------------

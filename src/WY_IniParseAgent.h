@@ -29,7 +29,7 @@ unsigned int wyini_get_nextline(const unsigned int p_start_offset, unsigned int 
  * @param p_var_len The length of the variable to match.
  * @param p_var The variable to match.
  * @param p_return_offset Returns the offset pointing to the start of the value as selected by the value in p_var_only.
- * \return WYINI_OK if success. Else a negative value defined in WY_IniDefs.h.
+ * \return WYINI_OK if success. Else a negative value defined in WY_IniDefs.h. If WYINI_VAL_NOT_FOUND is returned, this means that although p_var_only is set to false, the variable is found, but the value is missing in the 'var=val' pattern.
  */
 int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var, unsigned int *restrict p_return_offset, struct S_wyini_buffer *restrict p_wyini_buffer);
 

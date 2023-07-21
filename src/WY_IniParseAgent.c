@@ -33,6 +33,7 @@ unsigned int wyini_get_nextline(const unsigned int p_start_offset, unsigned int 
 int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_offset, const unsigned int p_end_offset, const unsigned int p_var_len, const char *restrict const p_var, unsigned int *restrict p_return_offset, struct S_wyini_buffer *restrict p_wyini_buffer)
 {
     char *restrict buffer = p_wyini_buffer->m_buffer;
+    int return_val = WYINI_NOT_FOUND;
 
     if(strncmp(buffer + p_start_offset, p_var, p_var_len) != 0) /* Cannot match the var so exit. */
         return WYINI_NOT_FOUND;
@@ -42,6 +43,7 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
         if(buffer[i]==' ') /* Skip any whitespace. */
             ++i;
         else if(buffer[i]=='=') { /* Found '='. Break the loop. */
+            return_val = WYINI_VAL_NOT_FOUND; /* Indicates that we at least found the 'var=' pattern. */
             ++i;
             break;
         }
@@ -50,7 +52,7 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
     }
 
     if(i > p_end_offset) /* Make sure we do not exceed the nextline bounds. */
-        return WYINI_NOT_FOUND;
+        return return_val;
 
     if(p_var_only) { /* Only searching for the pattern 'var='. The 'val' that comes after is not required. */
         *p_return_offset = i;
@@ -67,7 +69,6 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
     if(i<=p_end_offset) { /* Get the value assigned to the var. */
         *p_return_offset = i;
         return WYINI_OK;
-    }
-
-    return WYINI_NOT_FOUND;
+    } else
+        return WYINI_VAL_NOT_FOUND;
 }

@@ -80,11 +80,13 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
     unsigned int val_offset = 0;
     unsigned int val_len = 0;
     unsigned int nextline_len = 0;
+    unsigned int tmp = 0;
 
     while(start_offset < max_len) {
         nextline_len = 1 + wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
-                
-        if(wyini_find_var_val_inline(false, start_offset, end_offset, var_len, p_var, &val_offset, &m_wyini_buffer)==WYINI_OK) { /* Find the variable=value pair in the line. */
+        
+        tmp = wyini_find_var_val_inline(false, start_offset, end_offset, var_len, p_var, &val_offset, &m_wyini_buffer);
+        if(tmp==WYINI_OK) { /* Found the variable=value pair in the line. */
             val_len = wyini_remove_ending_whitespace(start_offset, end_offset, &m_wyini_buffer) - val_offset + 1; /* Remove trailing whitespace after variable=value. +1 is needed as our bounds include the starting and end index. */
             if(val_len < WYINI_MAX_VAL_LEN) {
                 memcpy(m_wyini_buffer.m_val_buffer, m_wyini_buffer.m_buffer+val_offset, val_len);
@@ -92,7 +94,8 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
                 return WYINI_OK; /* Found everything. Return success. */
             } else
                 return WYINI_NOT_FOUND; /* If val_len exceeds buffer assume we'll get the wrong value. Return failure. */
-        } 
+        } else if(tmp==WYINI_VAL_NOT_FOUND) /* Found the variable but it has no value assigned to it. */
+            return WYINI_VAL_NOT_FOUND;
         
         start_offset = end_offset + nextline_len; /* Pattern not found. Move on to the next line, skipping the nextline characters. */
     }
