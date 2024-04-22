@@ -38,7 +38,7 @@ int wyini_find_var_val_inline(const bool p_var_only, const unsigned int p_start_
     if(strncmp(buffer + p_start_offset, p_var, p_var_len) != 0) /* Cannot match the var so exit. */
         return WYINI_NOT_FOUND;
 
-    int i = p_start_offset + p_var_len; /* Move index to right after the 'var' pattern found. */
+    unsigned int i = p_start_offset + p_var_len; /* Move index to right after the 'var' pattern found. */
     while(i<=p_end_offset) { /* Try to match the " =" pattern after the var. */
         if(buffer[i]==' ') /* Skip any whitespace. */
             ++i;

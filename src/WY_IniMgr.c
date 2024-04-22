@@ -80,7 +80,7 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
     unsigned int val_offset = 0;
     unsigned int val_len = 0;
     unsigned int nextline_len = 0;
-    unsigned int tmp = 0;
+    int tmp = 0;
 
     while(start_offset < max_len) {
         nextline_len = 1 + wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */

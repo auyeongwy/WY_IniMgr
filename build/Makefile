@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -std=c17 -Wall -O2 -march=native
+CFLAGS = -std=c17 -Wall -Wextra -O3
+ARCH = -march=native
 #CFLAGS = -Wall -std=c17 -fsanitize=address -static-libasan -g3 -march=native
 SRC = ../src
 BUILD = ../build
@@ -15,23 +16,23 @@ all: $(BUILD)/demo $(TARGETLIB)
 
 $(BUILD)/demo: $(SRC)/demo.c $(API_HEADERS) $(TARGETLIB)
 	@echo Building demo...
-	$(CC) $(CFLAGS) $(SRC)/demo.c $(TARGETLIB) -o $(BUILD)/demo
+	$(CC) $(CFLAGS) $(ARCH)  $(SRC)/demo.c $(TARGETLIB) -o $(BUILD)/demo
 
 $(TARGETLIB): object_msg $(OBJS)
 	@echo Building library...
 	ar rcs $(TARGETLIB) $(OBJS)
 
 $(BUILD)/WY_IniMgr.o: $(HEADERS) $(SRC)/WY_IniMgr.c
-	$(CC) $(CFLAGS) -c $(SRC)/WY_IniMgr.c -o $(BUILD)/WY_IniMgr.o
+	$(CC) $(CFLAGS) $(ARCH)  -c $(SRC)/WY_IniMgr.c -o $(BUILD)/WY_IniMgr.o
 
 $(BUILD)/WY_IniIO.o: $(HEADERS) $(SRC)/WY_IniIO.c
-	$(CC) $(CFLAGS) -c $(SRC)/WY_IniIO.c -o $(BUILD)/WY_IniIO.o
+	$(CC) $(CFLAGS) $(ARCH)  -c $(SRC)/WY_IniIO.c -o $(BUILD)/WY_IniIO.o
 
 $(BUILD)/WY_IniParseAgent.o: $(HEADERS) $(SRC)/WY_IniParseAgent.c
-	$(CC) $(CFLAGS) -c $(SRC)/WY_IniParseAgent.c -o $(BUILD)/WY_IniParseAgent.o
+	$(CC) $(CFLAGS) $(ARCH)  -c $(SRC)/WY_IniParseAgent.c -o $(BUILD)/WY_IniParseAgent.o
 
 $(BUILD)/WY_IniWriteAgent.o: $(HEADERS) $(SRC)/WY_IniWriteAgent.c
-	$(CC) $(CFLAGS) -c $(SRC)/WY_IniWriteAgent.c -o $(BUILD)/WY_IniWriteAgent.o
+	$(CC) $(CFLAGS) $(ARCH)  -c $(SRC)/WY_IniWriteAgent.c -o $(BUILD)/WY_IniWriteAgent.o
 
 object_msg:
 	@echo Building objects...

@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
         printf("VAR: %s not found\n", var);
 
     strncpy(var, "VAR_5", strlen("VAR_5")+1);
-    unsigned tmp = wyini_get_var_val(var, &val); /* Read a var with no value assigned. */
+    int tmp = wyini_get_var_val(var, &val); /* Read a var with no value assigned. */
     if(tmp == WYINI_OK) 
         printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
     else if(tmp == WYINI_VAL_NOT_FOUND)
