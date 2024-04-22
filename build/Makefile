@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c17 -Wall -Wextra -O3
+CFLAGS = -std=c17 -Wall -Wextra -O3 -flto
 ARCH = -march=native
 #CFLAGS = -Wall -std=c17 -fsanitize=address -static-libasan -g3 -march=native
 SRC = ../src
