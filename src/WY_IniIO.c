@@ -9,7 +9,7 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
     int return_val = WYINI_IO_ERR;
 
     FILE *fp = NULL;
-    if((fp = fopen(p_file, "r")) == NULL) /* Try to open file for reading. */     
+    if((fp = fopen(p_file, "rb")) == NULL) /* Open file for reading. */     
         return return_val;
     if(fseek(fp, 0, SEEK_END) != 0) /* Goto end of file. */
         goto bad_exit;
@@ -26,8 +26,7 @@ int wyini_read_file(const char *restrict const p_file, const unsigned int p_max_
         goto bad_exit;
     }
 
-    fread(*p_buffer, *p_buffer_len, 1, fp); /* Read content into m_buffer. */
-    if(ferror(fp) != 0)
+    if(fread(*p_buffer, 1, *p_buffer_len, fp) != *p_buffer_len) /* Read content into m_buffer. */
         goto bad_exit;
 
     fclose(fp);
@@ -49,11 +48,10 @@ int wyini_save_file(const char *restrict const p_file, const unsigned int p_buff
     int return_val = WYINI_IO_ERR;
 
     FILE *fp = NULL;
-    if((fp = fopen(p_file, "w")) == NULL) /* Create file for writing, overwriting where necessary. */     
+    if((fp = fopen(p_file, "wb")) == NULL) /* Create file for writing, overwriting where necessary. */
         return return_val;
 
-    fwrite(p_buffer, 1, p_buffer_len, fp); /* Writes data to file. */
-    if(!ferror(fp)) /* No error writing to file. */
+    if(fwrite(p_buffer, 1, p_buffer_len, fp) > 0) /* Writes data to file. */
         return_val = WYINI_OK;
 
     fclose(fp);

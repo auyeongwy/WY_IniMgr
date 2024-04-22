@@ -12,8 +12,11 @@
 
 int main(int argc, char *argv[])
 {
-    //const char *filename = "win_inifile.txt";
-    const char *filename = "inifile";
+    #if defined _FILE_NAME_ /* Defined in Makefile. */
+    const char *filename = _FILE_NAME_; 
+    #else
+    const char *filename = "filename.txt";
+    #endif
     char var[32];
     char num_val[32];
     char *val;
