@@ -1,7 +1,8 @@
 CC = gcc
 CFLAGS = -std=c17 -Wall -Wextra -O3 -flto
 ARCH = -march=native
-#CFLAGS = -Wall -std=c17 -fsanitize=address -static-libasan -g3 -march=native
+#CFLAGS = -Wall -std=c17 -fsanitize=address -static-libasan -g3 
+CUSTOM_DEFS = -D'_FILE_NAME_="inifile"'
 SRC = ../src
 BUILD = ../build
 OBJS = $(BUILD)/WY_IniMgr.o $(BUILD)/WY_IniIO.o $(BUILD)/WY_IniParseAgent.o $(BUILD)/WY_IniWriteAgent.o 
@@ -16,7 +17,7 @@ all: $(BUILD)/demo $(TARGETLIB)
 
 $(BUILD)/demo: $(SRC)/demo.c $(API_HEADERS) $(TARGETLIB)
 	@echo Building demo...
-	$(CC) $(CFLAGS) $(ARCH)  $(SRC)/demo.c $(TARGETLIB) -o $(BUILD)/demo
+	$(CC) $(CFLAGS) $(CUSTOM_DEFS) $(ARCH)  $(SRC)/demo.c $(TARGETLIB) -o $(BUILD)/demo
 
 $(TARGETLIB): object_msg $(OBJS)
 	@echo Building library...
