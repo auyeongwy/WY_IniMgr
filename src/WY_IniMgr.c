@@ -74,7 +74,7 @@ int wyini_get_var_val(const char *restrict const p_var, char *restrict *restrict
     *p_val = m_wyini_buffer.m_val_buffer; /* This value would be invalid if wyini_get_val() below returns failure. */
 
     const unsigned int max_len = m_wyini_buffer.m_buffer_len;
-    const unsigned int var_len = strlen(p_var);
+    const unsigned int var_len = (unsigned int)strlen(p_var);
     unsigned int start_offset = 0;
     unsigned int end_offset = 0;
     unsigned int val_offset = 0;
@@ -111,7 +111,7 @@ int wyini_write_val(const char *restrict const p_var, const char *restrict const
         return WYINI_MEMORY_ERR;
 
     const unsigned int max_len = m_wyini_buffer.m_buffer_len;
-    const unsigned int val_len = strlen(p_val);
+    const unsigned int val_len = (unsigned int)strlen(p_val);
     unsigned int start_offset = 0;
     unsigned int end_offset = 0;
     unsigned int val_offset = 0;
@@ -122,7 +122,7 @@ int wyini_write_val(const char *restrict const p_var, const char *restrict const
 
     while(start_offset < max_len) {
         nextline_len = 1 + wyini_get_nextline(start_offset, &end_offset, &m_wyini_buffer); /* Get the next line in m_buffer. */
-        if(wyini_find_var_val_inline(true, start_offset, end_offset, strlen(p_var), p_var, &val_offset, &m_wyini_buffer)==WYINI_OK) /* Find the "variable=" pattern in the line. */
+        if(wyini_find_var_val_inline(true, start_offset, end_offset, (unsigned int)strlen(p_var), p_var, &val_offset, &m_wyini_buffer)==WYINI_OK) /* Find the "variable=" pattern in the line. */
             return wyini_write_val_inline(val_offset, end_offset, val_len, p_val, &m_wyini_buffer);
         start_offset = end_offset + nextline_len; /* Pattern not found. Move on to the next line, skipping the '\n'. */
     }

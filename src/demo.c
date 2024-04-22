@@ -25,42 +25,48 @@ int main(int argc, char *argv[])
     } else
         printf("Open and read file %s\n", filename);
 
-    strncpy(var, "VAR_2", strlen("VAR_2")+1);
+    strncpy(var, "VAR_2", strlen("VAR_2"));
+    var[strlen("VAR_2")] = 0;
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Read a var. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else
         printf("VAR:%s not found\n", var);
 
-    strncpy(var, "VAR_3", strlen("VAR_3")+1);
+    strncpy(var, "VAR_3", strlen("VAR_3"));
+    var[strlen("VAR_3")] = 0;
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Read another var. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else
         printf("VAR:%s not found\n", var);
 
-    strncpy(var, "VAR_4", strlen("VAR_4")+1);
+    strncpy(var, "VAR_4", strlen("VAR_4"));
+    var[strlen("VAR_4")] = 0;
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Read another var. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else
         printf("VAR: %s not found\n", var);
 
-    strncpy(var, "VAR_5", strlen("VAR_5")+1);
+    strncpy(var, "VAR_5", strlen("VAR_5"));
+    var[strlen("VAR_5")] = 0;
     int tmp = wyini_get_var_val(var, &val); /* Read a var with no value assigned. */
     if(tmp == WYINI_OK) 
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else if(tmp == WYINI_VAL_NOT_FOUND)
         printf("VAR: %s has no value\n", var);
     else
         printf("VAR: %s not found\n", var);
 
-    strncpy(var, "NO_VAR", strlen("NO_VAR")+1);
+    strncpy(var, "NO_VAR", strlen("NO_VAR"));
+    var[strlen("NO_VAR")] = 0;
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Read var that does not exist. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else
         printf("VAR: %s not found\n", var);
 
-    strncpy(var, "NUM_VAR_1", strlen("NUM_VAR_1")+1);
+    strncpy(var, "NUM_VAR_1", strlen("NUM_VAR_1"));
+    var[strlen("NUM_VAR_1")] = 0;
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Read another var. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else {
         printf("VAR:%s not found\n", var);
         goto do_exit;
@@ -74,7 +80,7 @@ int main(int argc, char *argv[])
         printf("Wrote VAL:%s to VAR:%s\n", num_val, var);
 
     if(wyini_get_var_val(var, &val) == WYINI_OK) /* Let's read "NUM_VAR_1" after we overwrote the value. */
-        printf("VAR:%s | VAL:%s | VAL len:%ld\n", var, val, strlen(val));
+        printf("VAR:%s | VAL:%s | VAL len:%zd\n", var, val, strlen(val));
     else {
         printf("VAR:%s not found\n", var);
         goto do_exit;
