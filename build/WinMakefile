@@ -1,0 +1,41 @@
+CC = cl
+CFLAGS = /O2 /W4 /GL /std:c17 /nologo /D_OS_WINDOWS_ /D_CRT_SECURE_NO_WARNINGS
+CUSTOM_DEFS = /D_FILE_NAME_=\"win_inifile.txt\"
+#CFLAGS = /Od /W4 /Zi /std:c17 /nologo /D_OS_WINDOWS_ /D_CRT_SECURE_NO_WARNINGS /fsanitize=address
+ARCH = /favor:INTEL64
+SRC = ..\src
+BUILD = ..\build
+OBJS = $(BUILD)\WY_IniMgr.obj $(BUILD)\WY_IniIO.obj $(BUILD)\WY_IniParseAgent.obj $(BUILD)\WY_IniWriteAgent.obj 
+API_HEADERS = $(SRC)\WY_IniMgr.h 
+HEADERS = $(SRC)\WY_IniMgr.h $(SRC)\WY_IniIO.h $(SRC)\WY_IniDefs.h $(SRC)\WY_IniParseAgent.h $(SRC)\WY_IniWriteAgent.h
+SRCFILES = $(SRC)\WY_IniMgr.c $(SRC)\WY_IniIO.c $(SRC)\WY_IniParseAgent.c $(SRC)\WY_IniWriteAgent.c
+TARGETLIB = $(BUILD)\lib_WY_IniMgr.lib
+TARGETEXE = $(BUILD)\demo.exe
+
+
+#.PHONY: clean distclean object_msg
+
+all: $(TARGETEXE) $(TARGETLIB)
+
+$(TARGETEXE): $(SRC)\demo.c $(API_HEADERS) $(TARGETLIB)
+	@echo Building demo...
+	$(CC) $(CFLAGS) $(CUSTOM_DEFS) $(ARCH)  $(SRC)\demo.c $(TARGETLIB) /Fe:$(TARGETEXE)
+
+$(TARGETLIB): object_msg $(OBJS)
+	@echo Building library...
+	lib /nologo *.obj /out:$(TARGETLIB)
+
+$(OBJS): $(HEADERS) $(SRCFILES)
+	$(CC) $(CFLAGS) $(ARCH) /c $(SRCFILES)
+
+object_msg:
+	@echo Building objects...
+
+clean:
+	del $(BUILD)\*.obj
+	del $(BUILD)\*ilk
+	del $(BUILD)\*pdb
+
+distclean: clean
+	del $(BUILD)\demo.exe
+	del $(TARGETLIB)
